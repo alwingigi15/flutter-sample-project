@@ -1,25 +1,37 @@
 pipeline {
-agent any
+    agent any
 
-stages {
+    stages {
 
-    stage('Install Dependencies') {
-        steps {
-            bat 'flutter pub get'
+        stage('Install Dependencies') {
+            steps {
+                bat 'flutter pub get'
+            }
+        }
+
+        stage('Analyze') {
+            steps {
+                bat 'flutter analyze'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                bat 'flutter test'
+            }
+        }
+
+        stage('Build Web') {
+            steps {
+                bat 'flutter build web --release'
+            }
+        }
+
+        stage('Archive Web') {
+            steps {
+                archiveArtifacts artifacts: 'build\\web\\**',
+                                  fingerprint: true
+            }
         }
     }
-
-    stage('Test') {
-        steps {
-            bat 'flutter test'
-        }
-    }
-
-    stage('Build') {
-        steps {
-            bat 'flutter build apk'
-        }
-    }
-}
-
 }
